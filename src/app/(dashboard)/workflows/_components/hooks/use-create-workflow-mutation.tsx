@@ -14,6 +14,7 @@ export function useCreateWorkflowMutation() {
       return createWorkflow({
         title: values.title,
         description: values.description || null,
+        definition: values.definition || "",
         status: WorkflowStatus.DRAFT,
       });
     },

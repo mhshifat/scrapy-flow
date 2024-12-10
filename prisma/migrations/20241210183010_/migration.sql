@@ -2,7 +2,10 @@
 CREATE TABLE "Workflow" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "title" TEXT NOT NULL,
-    "desctiption" TEXT
+    "description" TEXT,
+    "status" TEXT NOT NULL DEFAULT 'DRAFT',
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
 );
 
 -- CreateIndex

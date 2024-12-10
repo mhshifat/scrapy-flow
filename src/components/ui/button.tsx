@@ -3,11 +3,11 @@ import { cva } from 'class-variance-authority';
 import { ButtonHTMLAttributes, PropsWithChildren } from "react";
 import Spinner from './spinner';
 
-const buttonVariants = cva("flex items-center text-sm justify-center font-medium rounded-md cursor-pointer transition disabled:bg-foreground/30 disabled:border-foreground/10 disabled:text-foreground/40 disabled:cursor-not-allowed", {
+const buttonVariants = cva("flex items-center text-sm justify-center font-medium rounded-md cursor-pointer transition disabled:bg-foreground/30 disabled:border-foreground/10 disabled:text-foreground/60 disabled:cursor-not-allowed", {
   variants: {
     variant: {
       default: "bg-foreground text-background border border-foreground hover:bg-background hover:text-foreground",
-      ghost: "bg-background border border-background text-foreground hover:bg-foreground hover:text-background"
+      ghost: "bg-transparent border border-transparent text-foreground"
     },
     size: {
       default: "px-5 py-[7px]",

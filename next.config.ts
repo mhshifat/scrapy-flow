@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
 
 export default MillionLint.next({
   enabled: true,
-  rsc: true
+  rsc: true,
 })(withSentryConfig(withSentryConfig(nextConfig, {
   org: "example-org",
   project: "example-project",

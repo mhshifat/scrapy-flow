@@ -6,8 +6,10 @@ import Label from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import Button from "@/components/ui/button"
-import { useCreateWorkflowMutation } from "./hooks/useCreateWorkflowMutation"
+import { useCreateWorkflowMutation } from "./hooks/use-create-workflow-mutation"
 import { useRouter } from "next/navigation"
+import { createWorkflowNode } from "../editor/[id]/_components/helpers"
+import { WorkflowNodeTypes } from "../editor/[id]/_components/constants"
 
 interface CreateWorkflowFormProps {
   onSuccess?: () => void;
@@ -31,7 +33,18 @@ export default function CreateWorkflowForm({ onSuccess }: CreateWorkflowFormProp
       <Form
         disabled={loading}
         onSubmit={(values) => {
-          createWorkflow.mutateAsync(values as ICreateWorkflowFormValues)
+          createWorkflow.mutateAsync({
+            ...values as ICreateWorkflowFormValues,
+            definition: JSON.stringify({
+              nodes: [createWorkflowNode(WorkflowNodeTypes.LAUNCH_BROWSER)],
+              edges: [],
+              viewport: {
+                x: 0,
+                y: 0,
+                zoom: 1
+              }
+            })
+          })
             .then((data) => {
               onSuccess?.();
               router.push(`/workflows/editor/${data.id}`);

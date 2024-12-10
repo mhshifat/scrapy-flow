@@ -3,9 +3,9 @@
 import { unstable_noStore } from "next/cache";
 import db from "@/lib/db";
 import { waitFor } from "@/utils/helpers";
-import { ICreateWorkflowFormValues } from "@/app/(dashboard)/workflows/_components/validations";
 import { createWorkflowSchema } from './../app/(dashboard)/workflows/_components/validations';
 import { Workflow } from "@prisma/client";
+import { WorkflowStatus } from "@/app/(dashboard)/workflows/_components/constants";
 
 export async function getWorkflows() {
   unstable_noStore();
@@ -25,5 +25,30 @@ export async function createWorkflow(data: CreateWorkflowPayload) {
 
   return db.workflow.create({
     data
+  });
+}
+
+export async function updateWorkflowById(id: string, data: Partial<CreateWorkflowPayload>) {
+  await createWorkflowSchema.partial().parseAsync(data);
+
+  const workflow = await db.workflow.findUnique({
+    where: {
+      id
+    }
+  });
+
+  if (workflow?.status !== WorkflowStatus.DRAFT) throw new Error("Cannot update active workflow");
+
+  return db.workflow.update({
+    where: { id },
+    data
+  });
+}
+
+export async function getWorkflowById(id: string) {
+  return db.workflow.findUnique({
+    where: {
+      id
+    }
   });
 }

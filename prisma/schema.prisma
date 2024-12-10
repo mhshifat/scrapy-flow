@@ -14,6 +14,7 @@ model Workflow {
   id          String @id @default(cuid())
   title       String
   description String?
+  definition  String
   status      String @default("DRAFT")
 
   createdAt  DateTime @default(now())

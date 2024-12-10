@@ -94,7 +94,7 @@ export default function DialogProvider({ children }: PropsWithChildren) {
               <>
                 <Dialog.Header onClose={closeDialog}>
                   <h3 className="text-lg font-medium text-foreground">{dialog.title}</h3>
-                  <p className="text-xs font-medium mt-1 text-foreground/50">{dialog.description}</p>
+                  <p className="text-xs font-medium mt-1 text-foreground/60">{dialog.description}</p>
                 </Dialog.Header>
                 <Divider />
               </>
