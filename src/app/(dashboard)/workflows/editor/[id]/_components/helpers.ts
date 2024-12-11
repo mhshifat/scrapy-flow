@@ -11,12 +11,12 @@ export interface WorkflowNode extends Node {
   data: WorkflowNodeData;
 }
 
-export function createWorkflowNode(type: keyof typeof WorkflowNodeTypes): WorkflowNode {
+export function createWorkflowNode(type: keyof typeof WorkflowNodeTypes, options?: { position: { x: number, y: number } }): WorkflowNode {
   return {
     id: crypto.randomUUID(),
     type: "WORKFLOW_NODE",
     dragHandle: ".drag-handle",
-    position: { x: 10, y: 10 },
+    position: options?.position || { x: 10, y: 10 },
     data: {
       type,
       inputs: {}

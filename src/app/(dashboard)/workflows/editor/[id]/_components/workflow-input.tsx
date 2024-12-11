@@ -1,19 +1,53 @@
 import { Input } from "@/components/ui/input";
-import { WorkflowNodeInputTypes, WorkflowNodeRegistry } from "./constants";
-import { memo, PropsWithChildren, useState } from "react";
-import { Handle, Position, useReactFlow } from "@xyflow/react";
+import {
+	ColorForWorkflowNodeHandle,
+	WorkflowNodeInputTypes,
+	WorkflowNodeRegistry,
+} from "./constants";
+import React, {
+	FunctionComponent,
+	memo,
+	PropsWithChildren,
+	useEffect,
+	useState,
+} from "react";
+import { Handle, Position, useEdges, useReactFlow } from "@xyflow/react";
 import { WorkflowNode, WorkflowNodeData } from "./helpers";
+import Label from "@/components/ui/label";
+import { cn } from "@/utils/helpers";
+import { Textarea } from "@/components/ui/textarea";
 
 function WorkflowInput({
-  input,
-  nodeId
+	input,
+	value: propsValue,
+	nodeId,
 }: {
-  nodeId: string;
-  input: typeof WorkflowNodeRegistry[keyof typeof WorkflowNodeRegistry]["inputs"][number]
+	nodeId: string;
+	input: (typeof WorkflowNodeRegistry)[keyof typeof WorkflowNodeRegistry]["inputs"][number];
+	value: string;
 }) {
+  const edges = useEdges();
 	const [value, setValue] = useState("");
 	const { getNode, updateNodeData } = useReactFlow();
+
+  const isConnected = edges.some(ed => ed.target === nodeId && ed.targetHandle === input.label);
 	const node = getNode(nodeId) as WorkflowNode;
+	let InputComponent: FunctionComponent<{
+		value: string;
+		onChange: (
+			e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+		) => void;
+		onBlur: (
+			e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+		) => void;
+    disabled: boolean;
+	}> = Input;
+	if ("variant" in input && input.variant === "textarea")
+		InputComponent = Textarea;
+
+	useEffect(() => {
+		setValue(propsValue || "");
+	}, [propsValue]);
 
 	function updateNodeInput() {
 		updateNodeData(nodeId, {
@@ -27,35 +61,82 @@ function WorkflowInput({
 	switch (input.type) {
 		case WorkflowNodeInputTypes.STRING:
 			return (
-				<WorkflowInput.Handle hideHandle={input.hideHandle}>
-					<Input
-						value={value || node?.data?.inputs?.[input.label]}
-						onChange={({ target }) => setValue(target.value)}
-						onBlur={updateNodeInput}
-					/>
-				</WorkflowInput.Handle>
+				<Label
+					title={input.label}
+					required={input.required}
+					className="py-2 relative"
+				>
+					<WorkflowInput.Handle
+            isConnectable={!isConnected}
+						label={input.label}
+						type={input.type}
+						hideHandle={input.hideHandle}
+					>
+						<InputComponent
+							value={value}
+							onChange={({ target }) => setValue(target.value)}
+							onBlur={updateNodeInput}
+              disabled={isConnected}
+						/>
+					</WorkflowInput.Handle>
+				</Label>
+			);
+		case WorkflowNodeInputTypes.BROWSER_INSTANCE:
+			return (
+				<Label title="" required={false} className="py-2 relative">
+					<WorkflowInput.Handle
+            isConnectable={!isConnected}
+						label={input.label}
+						type={input.type}
+						hideHandle={false}
+					>
+						{input.label}
+					</WorkflowInput.Handle>
+				</Label>
 			);
 		default:
-			return <></>;
+			return (
+				<Label title="" required={false} className="py-2 relative">
+					<WorkflowInput.Handle
+            isConnectable={false}
+						label={""}
+						type={"BROWSER_INSTANCE"}
+						hideHandle={false}
+					>
+						Not Implemented
+					</WorkflowInput.Handle>
+				</Label>
+			);
 	}
 }
 
 interface WorkflowInputHandleProps {
+	label: string;
 	hideHandle: boolean;
+	type: keyof typeof WorkflowNodeInputTypes;
+  isConnectable: boolean;
 }
 
 WorkflowInput.Handle = ({
+	type,
 	children,
 	hideHandle,
+	label,
+  isConnectable
 }: PropsWithChildren<WorkflowInputHandleProps>) => {
 	return (
 		<>
 			{children}
 			{!hideHandle && (
 				<Handle
+					id={label}
 					type="target"
+          isConnectable={isConnectable}
 					position={Position.Left}
-					className="!w-3 !h-3 !rounded-full !bg-foreground absolute !top-[calc(50%+11px)] -translate-y-1/2 !-left-4"
+					className={cn(
+						"!w-4 !h-4 !rounded-full !bg-foreground absolute !top-[calc(50%)] -translate-y-1/2 !-left-4",
+						ColorForWorkflowNodeHandle[type]
+					)}
 				/>
 			)}
 		</>

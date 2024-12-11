@@ -4,6 +4,7 @@ import WorkflowEditor from "./workflow-editor";
 import { ReactFlowProvider } from "@xyflow/react";
 import ClientOnly from "@/components/client-only";
 import WorkflowHeader from "./workflow-header";
+import WorkflowMenus from "./workflow-menus";
 
 interface WorkflowEditorContainerProps {
   workflowId: string;
@@ -20,9 +21,12 @@ export default async function WorkflowEditorContainer({ workflowId }: WorkflowEd
           <WorkflowHeader
             workflow={workflow}
           />
-          <WorkflowEditor
-            workflow={workflow}
-          />
+          <div className="h-full flex items-start">
+            <WorkflowMenus />
+            <WorkflowEditor
+              workflow={workflow}
+            />
+          </div>
         </ReactFlowProvider>
       </div>
     </ClientOnly>

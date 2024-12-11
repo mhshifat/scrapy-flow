@@ -4,15 +4,15 @@ import { memo } from "react";
 import { getNodeDetails, WorkflowNodeData } from "./helpers";
 import Badge from "@/components/ui/badge";
 import Button from "@/components/ui/button";
-import { GripVerticalIcon } from "lucide-react";
-import Label from "@/components/ui/label";
+import { GripVerticalIcon, Trash2Icon } from "lucide-react";
 import WorkflowInput from "./workflow-input";
+import WorkflowOutput from "./workflow-output";
 
 export default memo(
   function WorkflowNode({ selected, id, data }: NodeProps) {
-    const { getNode, setCenter } = useReactFlow();
+    const { getNode, setCenter, deleteElements } = useReactFlow();
     const nodeData = data as WorkflowNodeData;
-    const { icon: Icon, label, isEntryPoint, inputs } = getNodeDetails(nodeData.type);
+    const { icon: Icon, label, isEntryPoint, inputs, outputs } = getNodeDetails(nodeData.type);
 
     return (
       <div
@@ -39,6 +39,11 @@ export default memo(
           <span className="flex items-center gap-2 ml-auto">
             {isEntryPoint && <Badge>Entry point</Badge>}
 
+            {!isEntryPoint && <Button variant="ghost" size="icon" onClick={() => deleteElements({
+              nodes: [{ id }]
+            })}>
+              <Trash2Icon className="size-4" />
+            </Button>}
             <Button variant="ghost" size="icon" className="drag-handle cursor-grabbing">
               <GripVerticalIcon className="size-4" />
             </Button>
@@ -47,17 +52,18 @@ export default memo(
 
         <div className="flex flex-col gap-0 py-2 px-3">
           {inputs.map(input => (
-            <Label 
+            <WorkflowInput
               key={input.label} 
-              title={input.label} 
-              required={input.required}
-              className="py-2 relative"
-            >
-              <WorkflowInput
-                nodeId={id}
-                input={input}
-              />
-            </Label>
+              nodeId={id}
+              input={input}
+              value={nodeData.inputs[input.label]}
+            />
+          ))}
+          {outputs.map(output => (
+            <WorkflowOutput
+              key={output.label} 
+              output={output}
+            />
           ))}
         </div>
       </div>

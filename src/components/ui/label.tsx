@@ -13,8 +13,8 @@ export default function Label({ as = "label", className, error, required, childr
   const Component = as;
   
   return (
-    <Component className={cn("", className)}>
-      {title && <span>{title} {required && <i>*</i>}</span>}
+    <Component className={cn("leading-none", className)}>
+      {title && <span className="leading-none mb-1 inline-block">{title} {required && <i>*</i>}</span>}
       {children}
       <p>{error}</p>
     </Component>
