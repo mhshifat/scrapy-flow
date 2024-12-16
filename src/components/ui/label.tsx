@@ -14,9 +14,9 @@ export default function Label({ as = "label", className, error, required, childr
   
   return (
     <Component className={cn("leading-none", className)}>
-      {title && <span className="leading-none mb-1 inline-block">{title} {required && <i>*</i>}</span>}
+      {title && <span className="leading-none mb-2 inline-block">{title} {required && <i>*</i>}</span>}
       {children}
-      <p>{error}</p>
+      <p className="text-sm text-danger mt-2 capitalize font-medium leading-none">{error}</p>
     </Component>
   )
 }

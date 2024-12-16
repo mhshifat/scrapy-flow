@@ -5,4 +5,6 @@
 :root {
   --background: 0 0% 100%;
   --foreground: 0 0% 9%;
+  --success: 120 81% 55%;
+  --danger: 6 93% 71%;
 }

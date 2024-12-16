@@ -57,6 +57,7 @@ export default memo(
               nodeId={id}
               input={input}
               value={nodeData.inputs[input.label]}
+              error={nodeData.errors?.[input.label]}
             />
           ))}
           {outputs.map(output => (

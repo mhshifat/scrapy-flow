@@ -11,6 +11,8 @@ export default {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        danger: "hsl(var(--danger))",
+        success: "hsl(var(--success))"
       },
     },
   },

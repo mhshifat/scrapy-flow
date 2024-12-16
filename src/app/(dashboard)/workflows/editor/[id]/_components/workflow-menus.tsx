@@ -1,3 +1,5 @@
+"use client";
+
 import Accordion from "@/components/ui/accordion";
 import WorkflowBtn from "./workflow-btn";
 import { WorkflowNodeTypes } from "./constants";

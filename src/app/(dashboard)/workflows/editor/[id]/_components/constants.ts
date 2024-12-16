@@ -16,6 +16,23 @@ export const ColorForWorkflowNodeHandle: Record<keyof typeof WorkflowNodeInputTy
   BROWSER_INSTANCE: "!bg-sky-400",
 } as const;
 
+export interface WorkflowNodeType {
+  isEntryPoint: boolean;
+  label: string;
+  icon: unknown,
+  inputs: {
+    type: keyof typeof WorkflowNodeInputTypes;
+    label: string;
+    required: boolean;
+    hideHandle: boolean;
+    variant?: string;
+  }[],
+  outputs: {
+    type: keyof typeof WorkflowNodeInputTypes;
+    label: string;
+  }[]
+};
+
 export const WorkflowNodeRegistry = {
   LAUNCH_BROWSER: {
     isEntryPoint: true,
@@ -28,14 +45,14 @@ export const WorkflowNodeRegistry = {
         required: true,
         hideHandle: true
       }
-    ],
+    ] as const,
     outputs: [
       {
         type: WorkflowNodeInputTypes.BROWSER_INSTANCE,
         label: "Web Page",
       }
-    ]
-  },
+    ] as const,
+  } satisfies WorkflowNodeType,
   HTML_FROM_PAGE: {
     isEntryPoint: false,
     label: "Get HTML from page",
@@ -47,7 +64,7 @@ export const WorkflowNodeRegistry = {
         required: true,
         hideHandle: false
       }
-    ],
+    ] as const,
     outputs: [
       {
         type: WorkflowNodeInputTypes.STRING,
@@ -57,8 +74,8 @@ export const WorkflowNodeRegistry = {
         type: WorkflowNodeInputTypes.BROWSER_INSTANCE,
         label: "Web Page",
       }
-    ]
-  },
+    ] as const,
+  } satisfies WorkflowNodeType,
   EXTRACT_TEXT_FROM_ELEMENT: {
     isEntryPoint: false,
     label: "Extract text from element",
@@ -77,12 +94,12 @@ export const WorkflowNodeRegistry = {
         required: true,
         hideHandle: false
       },
-    ],
+    ] as const,
     outputs: [
       {
         type: WorkflowNodeInputTypes.STRING,
         label: "Extracted text",
       },
-    ]
-  }
+    ] as const,
+  } satisfies WorkflowNodeType
 };

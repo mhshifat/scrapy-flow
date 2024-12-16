@@ -21,10 +21,12 @@ function WorkflowInput({
 	input,
 	value: propsValue,
 	nodeId,
+	error,
 }: {
 	nodeId: string;
 	input: (typeof WorkflowNodeRegistry)[keyof typeof WorkflowNodeRegistry]["inputs"][number];
 	value: string;
+	error?: string;
 }) {
   const edges = useEdges();
 	const [value, setValue] = useState("");
@@ -50,12 +52,14 @@ function WorkflowInput({
 	}, [propsValue]);
 
 	function updateNodeInput() {
-		updateNodeData(nodeId, {
+    const newValue = {
 			...node?.data,
 			inputs: {
 				[input.label]: value,
 			},
-		} as WorkflowNodeData);
+		}
+    delete newValue?.errors?.[input.label];
+		updateNodeData(nodeId, newValue as WorkflowNodeData);
 	}
 
 	switch (input.type) {
@@ -65,6 +69,7 @@ function WorkflowInput({
 					title={input.label}
 					required={input.required}
 					className="py-2 relative"
+          error={error}
 				>
 					<WorkflowInput.Handle
             isConnectable={!isConnected}
@@ -83,7 +88,7 @@ function WorkflowInput({
 			);
 		case WorkflowNodeInputTypes.BROWSER_INSTANCE:
 			return (
-				<Label title="" required={false} className="py-2 relative">
+				<Label title="" required={false} className="py-2 relative" error={error}>
 					<WorkflowInput.Handle
             isConnectable={!isConnected}
 						label={input.label}

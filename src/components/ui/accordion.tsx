@@ -1,32 +1,33 @@
-import { PropsWithChildren } from "react";
+import { cn } from "@/utils/helpers";
+import { HTMLAttributes, PropsWithChildren } from "react";
 
-export default function Accordion({ children }: PropsWithChildren) {
+export default function Accordion({ children, className }: PropsWithChildren & HTMLAttributes<HTMLDivElement>) {
   return (
-    <div>
+    <div className={cn("", className)}>
       {children}
     </div> // TODO:
   )
 }
 
-Accordion.Item = ({ children }: PropsWithChildren) => {
+Accordion.Item = ({ children, className }: PropsWithChildren & HTMLAttributes<HTMLDivElement>) => {
   return (
-    <div>
+    <div className={cn("", className)}>
       {children}
     </div>
   )
 }
 
-Accordion.Trigger = ({ children }: PropsWithChildren) => {
+Accordion.Trigger = ({ children, className }: PropsWithChildren & HTMLAttributes<HTMLDivElement>) => {
   return (
-    <div>
+    <div className={cn("", className)}>
       {children}
     </div>
   )
 }
 
-Accordion.Body = ({ children }: PropsWithChildren) => {
+Accordion.Body = ({ children, className }: PropsWithChildren & HTMLAttributes<HTMLDivElement>) => {
   return (
-    <div>
+    <div className={cn("", className)}>
       {children}
     </div>
   )

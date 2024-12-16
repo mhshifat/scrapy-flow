@@ -12,6 +12,7 @@ export default async function WorkflowList() {
       )}
       {workflows.map(workflow => (
         <WorkflowCard
+          key={workflow.id}
           workflow={workflow}
         />
       ))}
