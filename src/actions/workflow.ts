@@ -253,3 +253,11 @@ export async function getWorkflowExecutionPhaseById(id: string) {
     }
   })
 }
+
+export async function getWorkflowRuns(workflowId: string) {
+  return db.workflowExecution.findMany({
+    where: {
+      workflowId
+    }
+  })
+}

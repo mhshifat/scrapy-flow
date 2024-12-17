@@ -1,5 +1,7 @@
+import Link from "next/link";
+
 export default function HomePage() {
   return (
-    <p>Homepage</p>
+    <Link href="/workflows" className="underline">Click Workflows</Link>
   )
 }

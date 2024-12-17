@@ -11,6 +11,8 @@ import { getInvalidNodeInputs, WorkflowNode } from "./helpers";
 import { catchAsync } from "@/utils/errors";
 import { useRunWorkflowPlanMutation } from "./hooks/use-run-workflow-plan-mutation";
 import { useRouter } from "next/navigation";
+import Tab from "@/components/ui/tab";
+import Link from "next/link";
 
 interface WorkflowHeaderProps {
   workflow: Workflow;
@@ -93,7 +95,7 @@ export default function WorkflowHeader({ workflow }: WorkflowHeaderProps) {
     } catch (err) {}
   }
   return (
-    <div className="w-full flex items-center gap-5 border-b border-foreground/10 py-2 px-3">
+    <div className="w-full flex items-center justify-between gap-5 border-b border-foreground/10 py-2 px-3">
       <div className="flex items-center gap-3 flex-1">
         <Button variant="ghost" size="icon">
           <ChevronLeftIcon className="size-6" />
@@ -105,7 +107,18 @@ export default function WorkflowHeader({ workflow }: WorkflowHeaderProps) {
         </div>
       </div>
 
-      <div className="ml-auto flex items-center gap-2">
+      <Tab>
+        <Tab.List className="flex items-center">
+          <Tab.Item>
+            <Link href={`/workflows/editor/${workflow.id}`}>Editor</Link>
+          </Tab.Item>
+          <Tab.Item>
+            <Link href={`/workflows/runs/${workflow.id}`}>Runs</Link>
+          </Tab.Item>
+        </Tab.List>
+      </Tab>
+
+      <div className="flex items-center gap-2 flex-1 justify-end">
         <Button disabled={runWorkflowPlan.isPending} loading={runWorkflowPlan.isPending} onClick={() => catchAsync(executeWorkflow, {
           name: "Workflow",
           operation: "Workflow execution failed"
